@@ -1,0 +1,97 @@
+<!-- user_applications.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Applications</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .header {
+    background-color: #0c2a49;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header ul li {
+    margin-right: 20px;
+}
+
+.header ul li:last-child {
+    margin-right: 0;
+}
+
+.header ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header ul li a:hover {
+    color: #f0f0f0;
+}
+
+
+
+.logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'job_seeker_index' %}">Home</a></li>
+            <li><a href="{% url 'update_personal_details' %}">Personal</a></li>
+            <li><a href="{% url 'user_educations' %}">Professional</a></li>
+            <li><a href="{% url 'user_applications' %}">Applications</a></li>
+            <li><a href="{% url 'feedback_page' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="container mt-5">
+        <h1 class="mb-4">User Applications</h1>
+        <div class="row">
+            <div class="col-md-8 offset-md-2">
+                <ul class="list-group">
+                    {% for application in applications %}
+                        <li class="list-group-item mb-3">
+                            <p class="mb-0"><strong>Date:</strong> {{ application.date }}</p>
+                            <p class="mb-2"><strong>Job Title:</strong> {{ application.job.title }}</p>
+                            <p class="mb-2"><strong>Status:</strong> {{ application.get_status_display }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

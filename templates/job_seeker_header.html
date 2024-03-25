@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+.header {
+    background-color: #0c2a49;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header ul li {
+    margin-right: 20px;
+}
+
+.header ul li:last-child {
+    margin-right: 0;
+}
+
+.header ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header ul li a:hover {
+    color: #f0f0f0;
+}
+
+
+
+.logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+
+<div class="header">
+    <h1>Aspirant</h1>
+    <ul>
+        <li><a href="#">Personal</a></li>
+        <li><a href="#">Academics</a></li>
+        <li><a href="#">Experience</a></li>
+        <li><a href="#">Applications</a></li>
+        <li><a href="#">Feedback</a></li>
+        <li><button class="logout-btn">Logout</button></li>
+    </ul>
+</div>
+
+

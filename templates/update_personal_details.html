@@ -1,0 +1,110 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Personal Details</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'registration_style.css' %}">
+  <style>
+    .container {
+      max-width: 500px;
+      margin: 50px auto;
+    }
+    .form-group label {
+      font-weight: bold;
+    }
+    .header {
+    background-color: #0c2a49;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header ul li {
+    margin-right: 20px;
+}
+
+.header ul li:last-child {
+    margin-right: 0;
+}
+
+.header ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header ul li a:hover {
+    color: #f0f0f0;
+}
+
+
+
+.logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>Aspirant</h1>
+    <ul>
+      <li><a href="{% url 'job_seeker_index' %}">Home</a></li>
+        <li><a href="{% url 'update_personal_details' %}">Personal</a></li>
+        <li><a href="{% url 'user_educations' %}">Professional</a></li>
+        <li><a href="{% url 'user_applications' %}">Applications</a></li>
+        <li><a href="{% url 'feedback_page' %}">Feedback</a></li>
+        <li><a href="{% url 'logout' %}">Log Out</a></li>
+    </ul>
+</div>
+  <div class="container">
+    <form method="post" enctype="multipart/form-data">
+      {% csrf_token %}
+      <h2 class="mb-4">Update Personal Details</h2>
+      <div class="form-group">
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" class="form-control" required>
+      </div>
+      <div class="form-group">
+        <label for="profile_picture">Profile Picture:</label>
+        <input type="file" id="profile_picture" name="profile_picture" class="form-control-file" accept="image/*">
+      </div>
+      <button type="submit" class="btn btn-primary">Save Changes</button>
+    </form>
+  </div>
+</body>
+</html>

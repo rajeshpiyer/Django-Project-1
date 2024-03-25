@@ -1,0 +1,123 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Job Search</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .header {
+            background-color: #0c2a49;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .header ul li {
+            margin-right: 20px;
+        }
+
+        .header ul li:last-child {
+            margin-right: 0;
+        }
+
+        .header ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .header ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .job-card {
+            background-color: #f8f9fa;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .company-logo {
+            width: 100px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'index' %}">Home</a></li>
+            <li><a href="{% url 'login' %}">Login</a></li>
+            <li><a href="{% url 'register' %}">Register</a></li>
+        </ul>
+    </div>
+
+    <div class="container mt-5">
+        <h2>Jobs</h2>
+        <!-- Search Bar -->
+        <form action="{% url 'index' %}" method="GET">
+            <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search..." name="search">
+                <div class="input-group-append">
+                    <button class="btn btn-primary" type="submit">Search</button>
+                </div>
+            </div>
+        </form>
+        <br><br>
+
+        <!-- Job List -->
+        <div class="row">
+            {% for job in jobs %}
+            <div class="col-md-6">
+                <div class="job-card">
+                    <div class="company-details">
+                        <img src="{% static job.company.logo.url %}" alt="{{ job.company.name }}" class="company-logo">
+                        <p><strong>{{ job.company.name }}</strong></p>
+                    </div>
+                    <h3>{{ job.title }}</h3>
+                    <p><strong>Location:</strong> {{ job.location }}</p>
+                    <p><strong>Employment Type:</strong> {{ job.get_employment_type_display }}</p>
+                    <p><strong>Application Deadline:</strong> {{ job.application_deadline }}</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary">View Detail</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Jobs</title>
+    <!-- Add your CSS link or styles here -->
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .header {
+            background-color: #0c2a49;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .header ul li {
+            margin-right: 20px;
+        }
+
+        .header ul li:last-child {
+            margin-right: 0;
+        }
+
+        .header ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .header ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'recruiter_index' %}">Home</a></li>
+            <li><a href="{% url 'update_recruiter_details' %}">Personal</a></li>
+            <li><a href="{% url 'add_company' %}">Company</a></li>
+            <li><a href="{% url 'job_list' %}">Jobs</a></li>
+            <li><a href="{% url 'list_applications' %}">Applications</a></li>
+            <li><a href="{% url 'recruiter_feedback' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h1>My Jobs</h1>
+        <a href="{% url 'create_job' %}" class="btn btn-primary">Add New Job</a><br><br>
+        <div class="job-list">
+            {% for job in jobs %}
+            <div class="job">
+                <h2>{{ job.title }}</h2>
+                <p>Description: {{ job.description }}</p>
+                <!-- Add more job details as needed -->
+
+                <!-- Delete button for each job -->
+                <form method="post" action="{% url 'delete_job' job.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Delete</button>
+                </form>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

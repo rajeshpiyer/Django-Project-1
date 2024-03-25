@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ job.title }}</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2, h3 {
+            color: #007bff;
+        }
+        p {
+            margin-bottom: 20px;
+        }
+        .job-info {
+            border-bottom: 1px solid #dee2e6;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+        .job-info h2 {
+            margin-top: 0;
+        }
+        .job-info p {
+            margin-bottom: 10px;
+        }
+        .apply-button {
+            text-align: center;
+        }
+        .apply-button button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .apply-button button:hover {
+            background-color: #0056b3;
+        }
+        .header {
+    background-color: #0c2a49;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header ul li {
+    margin-right: 20px;
+}
+
+.header ul li:last-child {
+    margin-right: 0;
+}
+
+.header ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header ul li a:hover {
+    color: #f0f0f0;
+}
+
+
+
+.logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'job_seeker_index' %}">Home</a></li>
+            <li><a href="{% url 'update_personal_details' %}">Personal</a></li>
+            <li><a href="{% url 'user_educations' %}">Professional</a></li>
+            <li><a href="{% url 'user_applications' %}">Applications</a></li>
+            <li><a href="{% url 'feedback_page' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="job-info">
+            <h1>{{ job.title }}</h1>
+            <h2>{{ job.company.name }}</h2>
+            <p><strong>Description:</strong> {{ job.description }}</p>
+            <p><strong>Required Qualifications:</strong> {{ job.required_qualifications }}</p>
+            <p><strong>Desired Qualifications:</strong> {{ job.desired_qualifications }}</p>
+            <p><strong>Responsibilities:</strong> {{ job.responsibilities }}</p>
+            <p><strong>Application Deadline:</strong> {{ job.application_deadline }}</p>
+            <p><strong>Salary Range:</strong> ${{ job.salary_min }} - ${{ job.salary_max }}</p>
+            <p><strong>Location:</strong> {{ job.location }}</p>
+            <p><strong>Employment Type:</strong> {{ job.get_employment_type_display }}</p>
+            <p><strong>Company Benefits:</strong> {{ job.company_benefits }}</p>
+            <p><strong>How to Apply:</strong> {{ job.how_to_apply }}</p>
+            <p><strong>Created At:</strong> {{ job.created_at }}</p>
+            <p><strong>Last Updated:</strong> {{ job.updated_at }}</p>
+        </div>
+        <form method="post" action="{% url 'job_detail' job.id %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="covering_letter">Covering Letter:</label><br>
+                {{ form.cover_letter }}
+            </div>
+            <div class="apply-button">
+                <button type="submit" class="btn btn-primary">Apply Now</button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>

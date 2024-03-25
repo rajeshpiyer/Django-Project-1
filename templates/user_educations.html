@@ -1,0 +1,161 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Educations and Experiences</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            margin-top: 50px;
+        }
+        .education-item, .experience-item {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .item-title {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .item-details {
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .add-resume-btn, .add-education-btn {
+            margin-bottom: 20px;
+        }
+        .resume-link {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .header {
+    background-color: #0c2a49;
+    color: #fff;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 24px;
+}
+
+.header ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.header ul li {
+    margin-right: 20px;
+}
+
+.header ul li:last-child {
+    margin-right: 0;
+}
+
+.header ul li a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.header ul li a:hover {
+    color: #f0f0f0;
+}
+
+
+
+.logout-btn {
+    background-color: #dc3545;
+    border: none;
+    color: #fff;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.logout-btn:hover {
+    background-color: #c82333;
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'job_seeker_index' %}">Home</a></li>
+            <li><a href="{% url 'update_personal_details' %}">Personal</a></li>
+            <li><a href="{% url 'user_educations' %}">Professional</a></li>
+            <li><a href="{% url 'user_applications' %}">Applications</a></li>
+            <li><a href="{% url 'feedback_page' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <h2 class="text-center mb-4">Your Educations and Experiences</h2>
+        
+        <!-- Resume Section -->
+        <h3 class="mb-3">Your Resume</h3>
+        {% if resume %}
+            <div class="resume-link">
+                <a href="{{ resume.resume.url }}" target="_blank">
+                    <img src="{% static 'file-icon.png' %}" alt="File Icon" width="40" height="40">
+                    {{ resume.resume.name }}
+                    <br>
+                    <br>
+                    <a href="{% url 'upload_resume' %}" class="btn btn-primary add-resume-btn">Change</a>
+                </a>
+            </div>
+        {% else %}
+            <a href="{% url 'upload_resume' %}" class="btn btn-primary add-resume-btn">Add Resume</a>
+        {% endif %}
+        
+        <!-- Education Section -->
+        <hr>
+        <h3 class="mt-4">Your Educations</h3>
+        <a href="{% url 'add_education' %}" class="btn btn-primary add-education-btn">Add Another Education</a>
+        <br><br>
+        {% if educations %}
+            {% for education in educations %}
+            <div class="education-item">
+                <div class="item-title">{{ education.level }} at {{ education.institution }}</div>
+                <div class="item-details">Years: {{ education.from_year }} - {{ education.to_year }}, Percentage: {{ education.percentage }}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No educations found.</p>
+        {% endif %}
+        
+        <!-- Experience Section -->
+        <hr>
+        <h3 class="mt-4">Your Experiences</h3>
+        <a href="{% url 'add_experience' %}" class="btn btn-primary add-experience-btn">Add Another Experience</a>
+        <br><br>
+        {% if experiences %}
+            {% for experience in experiences %}
+            <div class="experience-item">
+                <div class="item-title">{{ experience.role }} at {{ experience.company }}</div>
+                <div class="item-details">Years: {{ experience.from_year }} - {% if experience.to_year %}{{ experience.to_year }}{% else %}Present{% endif %}</div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p>No experiences found.</p>
+        {% endif %}
+    </div>
+</body>
+</html>

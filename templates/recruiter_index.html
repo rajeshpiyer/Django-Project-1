@@ -1,0 +1,178 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Applications</title>
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .application-list {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            background-color: #fff;
+        }
+
+        .application {
+            border-bottom: 1px solid #eee;
+            margin-bottom: 20px;
+        }
+
+        .application:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        .application h2 {
+            color: #007bff;
+            margin-top: 0;
+        }
+
+        .application p {
+            margin: 5px 0;
+        }
+
+        .download-resume {
+            margin-right: 10px;
+            text-decoration: none;
+            color: #007bff;
+        }
+
+        .status-dropdown {
+            margin-top: 10px;
+        }
+
+        .status-dropdown select {
+            padding: 5px;
+            font-size: 14px;
+        }
+
+        .status-dropdown button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            margin-left: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .status-dropdown button:hover {
+            background-color: #0056b3;
+        }
+        .header {
+            background-color: #0c2a49;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .header ul li {
+            margin-right: 20px;
+        }
+
+        .header ul li:last-child {
+            margin-right: 0;
+        }
+
+        .header ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .header ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'recruiter_index' %}">Home</a></li>
+            <li><a href="{% url 'update_recruiter_details' %}">Personal</a></li>
+            <li><a href="{% url 'add_company' %}">Company</a></li>
+            <li><a href="{% url 'job_list' %}">Jobs</a></li>
+            <li><a href="{% url 'list_applications' %}">Applications</a></li>
+            <li><a href="{% url 'recruiter_feedback' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
+    <div class="container">
+        <div class="application-list">
+            {% for application in applications %}
+            <div class="application">
+                <h2>Applicant: {{ application.user.username }}</h2>
+                <p>Job: {{ application.job.title }}</p>
+                <p>Date: {{ application.date }}</p>
+                <p>Cover Letter: {{ application.cover_letter }}</p>
+                <!-- Download link to resume -->
+                <a href="{{ application.user.resume.url }}" class="download-resume">Download Resume</a>
+                <!-- Dropdown to update status -->
+                <div class="status-dropdown">
+                    <form method="post" action="{% url 'update_status' application.id %}">
+                        {% csrf_token %}
+                        <select name="status">
+                            {% for status in application.STATUS_CHOICES %}
+                                <option value="{{ status.0 }}" {% if application.status == status.0 %}selected{% endif %}>{{ status.1 }}</option>
+                            {% endfor %}
+                        </select>
+                        <button type="submit">Update</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</body>
+</html>

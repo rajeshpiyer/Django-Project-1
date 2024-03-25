@@ -1,0 +1,71 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #007bff;
+    margin-bottom: 20px;
+}
+
+.application-list {
+    margin-top: 20px;
+}
+
+.application {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.application h2 {
+    color: #007bff;
+    margin-top: 0;
+}
+
+.application p {
+    margin: 10px 0;
+}
+
+.application a {
+    color: #007bff;
+    text-decoration: none;
+    margin-right: 10px;
+}
+
+.application a:hover {
+    text-decoration: underline;
+}
+
+.application form {
+    margin-top: 10px;
+}
+
+.application select {
+    padding: 5px;
+    border-radius: 3px;
+}
+
+.application button {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.application button:hover {
+    background-color: #0056b3;
+}
