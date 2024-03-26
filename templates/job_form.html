@@ -45,9 +45,73 @@
             border-radius: 0 0 20px 20px;
             margin-bottom: 30px;
         }
+        .header {
+            background-color: #0c2a49;
+            color: #fff;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .header ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            display: flex;
+        }
+
+        .header ul li {
+            margin-right: 20px;
+        }
+
+        .header ul li:last-child {
+            margin-right: 0;
+        }
+
+        .header ul li a {
+            color: #fff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .header ul li a:hover {
+            color: #f0f0f0;
+        }
+
+        .logout-btn {
+            background-color: #dc3545;
+            border: none;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
+    <div class="header">
+        <h1>Aspirant</h1>
+        <ul>
+            <li><a href="{% url 'recruiter_index' %}">Home</a></li>
+            <li><a href="{% url 'update_recruiter_details' %}">Personal</a></li>
+            <li><a href="{% url 'add_company' %}">Company</a></li>
+            <li><a href="{% url 'job_list' %}">Jobs</a></li>
+            <li><a href="{% url 'application_list' %}">Applications</a></li>
+            <li><a href="{% url 'recruiter_feedback' %}">Feedback</a></li>
+            <li><a href="{% url 'logout' %}">Log Out</a></li>
+        </ul>
+    </div>
     <div class="container">
         <div class="form-title">
             <h2 class="text-center">Create Job</h2>

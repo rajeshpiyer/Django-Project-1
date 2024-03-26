@@ -5,6 +5,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
 from .forms import *
+from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 
 def index(request):
     if 'search' in request.GET:
@@ -24,9 +26,9 @@ def custom_login_view(request):
             login(request, user)
                 
             if user.user_type == 'recruiter':
-                return redirect('add_company')
+                return redirect('recruiter_index')
             elif user.user_type == 'job_seeker':
-                return redirect('add_education')
+                return redirect('job_seeker_index')
             else:
                 return redirect('admin_dashboard')
         else:
@@ -68,7 +70,14 @@ def job_seeker_index(request):
         jobs = Job.objects.filter(title__icontains=search_query)
     else:
         jobs = Job.objects.all()
-    return render(request, 'job_seeker_index.html', {'jobs': jobs})
+
+    applications = Application.objects.filter(user=request.user)
+    applied_job_ids = applications.values_list('job_id', flat=True)
+    applied_jobs = Job.objects.filter(id__in=applied_job_ids)
+
+    return render(request, 'job_seeker_index.html', {'jobs': jobs, 'applied_job_ids':applied_job_ids})
+
+
 
 @login_required
 def job_detail(request, job_id):
@@ -80,6 +89,36 @@ def job_detail(request, job_id):
             cover_letter = form.cleaned_data['cover_letter']  # Corrected field name
             user = request.user
             application = Application.objects.create(user=user, job=job, cover_letter=cover_letter)
+            #SENDING MAIL
+            role = application.job.title
+            applicant = application.user
+            name = ""+applicant.first_name + "" + applicant.last_name
+            email = applicant.email        
+            sender = application.job.user.email
+            recipient = [email]
+            resume = Resume.objects.filter(user=request.user).order_by('-id').first()
+            file_path = resume.resume
+            qualifications = Education.objects.filter(user=request.user)
+
+            # TO APPLICANT
+            subject_to_applicant = "APPLICATION SUBMITTED FOR : " + role
+            message_to_applicant = "Congratulations!!\nYour Application is Sumbitted for "+ role +"\n Good Luck!"
+            send_mail(subject_to_applicant, message_to_applicant, sender, recipient)
+
+            #TO RECRUITER
+            subject_to_recruiter = "NEW APPLICATION RECIEVED FOR : " + role
+            message_to_recruiter = "New Application recieved for : "+role
+            message_to_recruiter += "\nApplicant Name : "+name
+            message_to_recruiter += "\nCovering Letter : \n"+application.cover_letter
+            message_to_recruiter += "\nEducational Qualifications : \n"
+            for q in qualifications:
+                message_to_recruiter += ""+q.level+" : "+q.institution+" : "+str(q.percentage)+"%\n"
+            message_to_recruiter += "\n\n Detailed Resume is Attached"
+
+            email_to_recruiter = EmailMessage(subject_to_recruiter, message_to_recruiter, sender, [sender])
+            email_to_recruiter.attach_file(str(file_path))
+            email_to_recruiter.send()
+            
             return redirect('user_applications') 
     else:
         form = ApplicationForm()
@@ -110,7 +149,7 @@ def update_personal_details(request):
             return redirect('job_seeker_index')  # Redirect to home page after successful update
     else:
         form = UpdateUserForm(instance=user)
-    return render(request, 'update_personal_details.html', {'form': form})
+    return render(request, 'update_personal_details.html', {'form': form,'user':user})
 #----------------------------------------------
 #----EDUCATIONAL QUALIFICATIONS---------------
 
@@ -176,10 +215,13 @@ def update_recruiter_details(request):
             return redirect('recruiter_index')  # Redirect to home page after successful update
     else:
         form = UpdateUserForm(instance=user)
-    return render(request, 'update_recruiter_details.html', {'form': form})
+    return render(request, 'update_recruiter_details.html', {'form': form,'user':user})
 
 @login_required
 def add_company(request):
+    # Get companies associated with the current user
+    user_companies = Company.objects.filter(user=request.user)
+    
     if request.method == 'POST':
         form = CompanyForm(request.POST, request.FILES)
         if form.is_valid():
@@ -190,7 +232,7 @@ def add_company(request):
     else:
         form = CompanyForm()
     
-    return render(request, 'company_form.html', {'form': form})
+    return render(request, 'company_form.html', {'form': form, 'user_companies': user_companies})
 
 @login_required
 def create_job(request):
@@ -253,6 +295,9 @@ def recruiter_index(request):
     applications = Application.objects.filter(job__user=request.user)
     return render(request, 'recruiter_index.html', {'applications': applications})
 
+
+
+
 @login_required
 def update_status(request, application_id):
     application = get_object_or_404(Application, pk=application_id)
@@ -260,6 +305,28 @@ def update_status(request, application_id):
         new_status = request.POST.get('status')
         application.status = new_status
         application.save()
+
+        #SENDING MAIL
+        role = application.job.title
+        applicant = application.user
+        name = ""+applicant.first_name + applicant.last_name
+        email = applicant.email        
+
+        sender = application.job.user.email
+        recipient = [email]
+        # TO APPLICANT
+        subject_to_applicant = "RE: STATUS UPDATED IN YOUR JOB APPLICATION : " + role
+        if new_status == "shortlisted":
+            message_to_applicant = "Congratulations!!\nHappy to inform that you are Shortlisted for thi role.\n Our HR team will contact you for further procedures."
+        else:
+            message_to_applicant = "Sorry, You're not shortlisted.\nBetter luck next time"
+        send_mail(subject_to_applicant, message_to_applicant, sender, recipient)
+
+        #TO RECRUITER
+        subject_to_recruiter = "RE: STATUS UPDATED IN JOB APPLICATION : " + role
+        message_to_recruiter = "Status Updated for :"+name+" in recruitment for : "+role+" as "+new_status
+        send_mail(subject_to_recruiter, message_to_recruiter, sender, [sender])
+
     return redirect('application_list')
 
 @login_required
@@ -302,7 +369,7 @@ def delete_user(request, user_id):
         return JsonResponse({'success': False, 'error': 'Invalid request method'}, status=405)
 
 @login_required
-def job_list(request):
+def admin_job_list(request):
     jobs = Job.objects.all()
     context = {
         'jobs': jobs
@@ -356,7 +423,7 @@ def update_reply(request, feedback_id):
         reply = request.POST.get('reply')
         feedback.reply = reply
         feedback.save()
-        return redirect('feedback_list')  # Redirect back to the feedback list page
+        return redirect('admin_feedback')  # Redirect back to the feedback list page
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=405)
 

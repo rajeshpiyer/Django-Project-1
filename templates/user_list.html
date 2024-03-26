@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -102,7 +103,7 @@
         <ul>
             <li><a href="{% url 'admin_dashboard' %}">Home</a></li>
             <li><a href="{% url 'user_list' %}">Users</a></li>
-            <li><a href="{% url 'job_list' %}">Jobs</a></li>
+            <li><a href="{% url 'admin_job_list' %}">Jobs</a></li>
             <li><a href="{% url 'admin_application_list' %}">Applications</a></li>
             <li><a href="{% url 'admin_feedback' %}">Feedback</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
@@ -123,7 +124,11 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td><img src="{{ user.photo.url }}" alt="User Photo"></td>
+                    {% if user.profile_picture %}
+                    <td><img src="{% static user.profile_picture.url %}" alt="User Photo"></td>
+                    {% else %}
+                    <td>No Photo</td>
+                    {% endif %}
                     <td>{{ user.username }}</td>
                     <td>{{ user.email }}</td>
                     <td><button class="delete-btn" onclick="deleteUser({{ user.id }})">Delete</button></td>

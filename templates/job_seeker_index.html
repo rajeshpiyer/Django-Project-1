@@ -116,7 +116,13 @@
                     <p><strong>Location:</strong> {{ job.location }}</p>
                     <p><strong>Employment Type:</strong> {{ job.get_employment_type_display }}</p>
                     <p><strong>Application Deadline:</strong> {{ job.application_deadline }}</p>
-                    <a href="{% url 'job_detail' job.id %}" class="btn btn-primary">View Detail</a>
+                    
+                    {% if job.id in applied_job_ids %}
+                        <button class="btn btn-success" disabled>Applied</button>
+                    {% else %}
+                        <a href="{% url 'job_detail' job.id %}" class="btn btn-primary">View Detail</a>
+                    {% endif %}
+
                 </div>
             </div>
             {% endfor %}

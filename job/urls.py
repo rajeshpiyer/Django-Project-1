@@ -22,14 +22,14 @@ urlpatterns = [
 
     path('jobs/', job_list, name='job_list'),
     path('jobs/delete/<int:job_id>/', delete_job, name='delete_job'),
-     path('application_list/', application_list, name='list_applications'),
+     path('application_list/', application_list, name='application_list'),
     path('application_list/update_status/<int:application_id>/', update_status, name='update_status'),
     path('recruiter_feedback/', recruiter_feedback, name='recruiter_feedback'),
 
     path('admin_dashboard/', admin_dashboard, name='admin_dashboard'),
     path('user_list/', user_list, name='user_list'),
     path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
-    path('job_list/', job_list, name='job_list'),
+    path('admin_job_list/', admin_job_list, name='admin_job_list'),
     path('delete_job/<int:job_id>/', delete_job, name='delete_job'),
     path('admin_application_list/', admin_application_list, name='admin_application_list'),
     path('delete_application/<int:application_id>/', delete_application, name='delete_application'),

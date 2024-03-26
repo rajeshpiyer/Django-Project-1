@@ -1,4 +1,5 @@
 <!-- company_form.html -->
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,7 +13,7 @@
             background-color: #f8f9fa;
         }
         .container {
-            width: 400px;
+            width: 750px;
             margin-top: 50px;
         }
         .form-group {
@@ -76,6 +77,36 @@
         .logout-btn:hover {
             background-color: #c82333;
         }
+        .card {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    transition: box-shadow 0.3s ease;
+}
+
+.card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.card-img-top {
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    max-height: 200px;
+    object-fit: cover;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.card-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.text-center {
+    text-align: center;
+}
     </style>
 </head>
 <body>
@@ -86,13 +117,33 @@
             <li><a href="{% url 'update_recruiter_details' %}">Personal</a></li>
             <li><a href="{% url 'add_company' %}">Company</a></li>
             <li><a href="{% url 'job_list' %}">Jobs</a></li>
-            <li><a href="{% url 'list_applications' %}">Applications</a></li>
+            <li><a href="{% url 'application_list' %}">Applications</a></li>
             <li><a href="{% url 'recruiter_feedback' %}">Feedback</a></li>
             <li><a href="{% url 'logout' %}">Log Out</a></li>
         </ul>
     </div>
     <div class="container">
-        <h2 class="text-center mb-4">Add Company</h2>
+        <h3>Your Companies</h3>
+        <div class="row">
+            {% for company in user_companies %}
+                <div class="col-md-12 mb-4">
+                    <div class="card">
+                        <div class="row no-gutters">
+                            <div class="col-md-4">
+                                <img src="{% static company.logo.url %}" class="card-img" alt="{{ company.name }}">
+                            </div>
+                            <div class="col-md-8">
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ company.name }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+        <hr>
+        <h3>Add New Company:</h3>
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
